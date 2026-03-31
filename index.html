@@ -3,59 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>האתר המצחיק שלי</title>
+    <title>לומדים את לוח הכפל בכיף</title>
     <style>
-        /* עיצוב האתר */
+        :root {
+            --primary: #4a90e2;
+            --secondary: #f39c12;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --bg: #f4f7f6;
+            --text: #2c3e50;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f9;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            margin: 20px 0;
         }
 
         button {
-            padding: 15px 30px;
-            font-size: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
             cursor: pointer;
-            background-color: #ff4b2b;
-            color: white;
             border: none;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            border-radius: 5px;
+            margin: 0 10px;
+            transition: background 0.3s;
         }
 
-        button:active {
-            transform: scale(0.95);
+        .btn-nav {
+            background-color: var(--secondary);
+            color: white;
         }
 
-        #message {
+        .btn-nav:hover {
+            background-color: #d68910;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 95%;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .hidden { display: none; }
+
+        /* לוח הכפל */
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            gap: 5px;
             margin-top: 20px;
-            font-size: 32px;
-            font-weight: bold;
-            color: #333;
-            min-height: 40px; /* שומר מקום לטקסט */
         }
+
+        .cell {
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            font-size: 1.1em;
+        }
+
+        .cell:hover { background-color: #eef2f3; }
+
+        .header-cell {
+            background-color: var(--primary);
+            color: white;
+            cursor: default;
+        }
+
+        .result-hidden {
+            color: transparent;
+            background-color: #f9f9f9;
+        }
+
+        .result-visible {
+            color: var(--text);
+            background-color: #fff;
+        }
+
+        /* אזור התרגול */
+        .quiz-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .question {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        #answer-input {
+            font-size: 24px;
+            padding: 10px;
+            width: 100px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        #feedback {
+            margin-top: 20px;
+            height: 30px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .score-board {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .correct-anim { color: var(--success); }
+        .wrong-anim { color: var(--error); }
+
     </style>
 </head>
 <body>
 
-    <button id="myButton">תלחץ עלי!</button>
-    <div id="message"></div>
+<header>
+    <h1>לומדים את לוח הכפל בקלות</h1>
+    <p>בלי רעש, בלי הסחות דעת - רק הצלחה!</p>
+</header>
 
-    <script>
-        // לוגיקה פשוטה ב-JS
-        const button = document.getElementById('myButton');
-        const messageDiv = document.getElementById('message');
+<nav>
+    <button class="btn-nav" onclick="showSection('learn')">לוח הכפל המלא</button>
+    <button class="btn-nav" onclick="showSection('practice')">מבחן תרגול</button>
+</nav>
 
-        button.addEventListener('click', function() {
-            messageDiv.textContent = 'אתה חמור';
-        });
-    </script>
+<div id="learn-section" class="container">
+    <h2>לוח הכפל האינטראקטיבי</h2>
+    <p>לחצו על כל משבצת כדי לגלות את התשובה:</p>
+    <div class="table-grid" id="multiplication-table">
+        <!-- הטבלה תיווצר כאן בעזרת JS -->
+    </div>
+</div>
+
+<div id="practice-section" class="container hidden">
+    <div class="quiz-container">
+        <h2>תרגול מהיר</h2>
+        <div class="question" id="question-text">7 × 8 = ?</div>
+        <input type="number" id="answer-input" placeholder="תשובה" autocomplete="off">
+        <br><br>
+        <button class="btn-nav" style="background-color: var(--success);" onclick="checkAnswer()">בדוק תשובה</button>
+        <div id="feedback"></div>
+        <div class="score-board">
+            הצלחות: <span id="score-correct">0</span> | 
+            טעויות: <span id="score-wrong">0</span>
+        </div>
+        <button class="btn-nav" style="background-color: #7f8c8d; margin-top: 20px; font-size: 14px;" onclick="nextQuestion()">דלג שאלה</button>
+    </div>
+</div>
+
+<script>
+    // יצירת לוח הכפל
+    const tableElement = document.getElementById('multiplication-table');
+    
+    function createTable() {
+        for (let i = 0; i <= 10; i++) {
+            for (let j = 0; j <= 10; j++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                
+                if (i === 0 && j === 0) {
+                    cell.textContent = 'X';
+                    cell.classList.add('header-cell');
+                } else if (i === 0) {
+                    cell.textContent = j;
+                    cell.classList.add('header-cell');
+                } else if (j === 0) {
+                    cell.textContent = i;
+                    cell.classList.add('header-cell');
+                } else {
+                    cell.textContent = i * j;
+                    cell.classList.add('result-hidden');
+                    cell.onclick = function() {
+                        this.classList.toggle('result-hidden');
+                        this.classList.toggle('result-visible');
+                    };
+                }
+                tableElement.appendChild(cell);
+            }
+        }
+    }
+
+    // ניהול תצוגה
+    function showSection(section) {
+        document.getElementById('learn-section').classList.add('hidden');
+        document.getElementById('practice-section').classList.add('hidden');
+        document.getElementById(section + '-section').classList.remove('hidden');
+        if(section === 'practice') nextQuestion();
+    }
+
+    // לוגיקת תרגול
+    let currentA, currentB;
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    function nextQuestion() {
+        currentA = Math.floor(Math.random() * 10) + 1;
+        currentB = Math.floor(Math.random() * 10) + 1;
+        document.getElementById('question-text').textContent = ${currentA} × ${currentB} = ?;
+        document.getElementById('answer-input').value = '';
+        document.getElementById('feedback').textContent = '';
+        document.getElementById('answer-input').focus();
+    }
+
+    function checkAnswer() {
+        const userInput = parseInt(document.getElementById('answer-input').value);
+        const feedback = document.getElementById('feedback');
+        
+        if (isNaN(userInput)) return;
+
+        if (userInput === currentA * currentB) {
+            feedback.textContent = "כל הכבוד! תשובה נכונה ✨";
+            feedback.className = "correct-anim";
+            correctCount++;
+            document.getElementById('score-correct').textContent = correctCount;
+            setTimeout(nextQuestion, 1500);
+        } else {
+            feedback.textContent = "לא נורא, נסה שוב! 🤔";
+            feedback.className = "wrong-anim";
+            wrongCount++;
+            document.getElementById('score-wrong').textContent = wrongCount;
+        }
+    }
+
+    // הפעלה ראשונית
+    createTable();
+
+    // האזנה למקש Enter בתיבת הטקסט
+    document.getElementById('answer-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            checkAnswer();
+        }
+    });
+</script>
 
 </body>
 </html>
