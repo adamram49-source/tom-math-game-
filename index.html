@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>האתר המצחיק שלי</title>
+    <style>
+        /* עיצוב האתר */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #ff4b2b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            min-height: 40px; /* שומר מקום לטקסט */
+        }
+    </style>
+</head>
+<body>
+
+    <button id="myButton">תלחץ עלי!</button>
+    <div id="message"></div>
+
+    <script>
+        // לוגיקה פשוטה ב-JS
+        const button = document.getElementById('myButton');
+        const messageDiv = document.getElementById('message');
+
+        button.addEventListener('click', function() {
+            messageDiv.textContent = 'אתה חמור';
+        });
+    </script>
+
+</body>
+</html>
